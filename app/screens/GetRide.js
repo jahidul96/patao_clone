@@ -1,8 +1,8 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import ScrollBottomSheet from "react-native-scroll-bottom-sheet";
 
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import { AppColor } from "../utils/AppColor";
 import {
   Fontisto,
@@ -11,11 +11,13 @@ import {
 } from "../utils/R_VectorIconExports";
 import SearchPlaceholder from "../components/SearchPlaceholder";
 import AddAddres from "../components/AddAddres";
-
-const windowHeight = Dimensions.get("window").height;
+import { MyLocationContext } from "../context/LocationContext";
+import { PositionBackBtn } from "../components/reuseable/Reuseable";
+import { HEIGHT } from "../utils/AppDimension";
 
 const GetRide = () => {
-  const ref = useRef();
+  const { userLocation } = useContext(MyLocationContext);
+
   return (
     <View style={styles.container}>
       <View
@@ -24,15 +26,29 @@ const GetRide = () => {
           backgroundColor: "red",
         }}
       >
+        {/* back comp */}
+        <PositionBackBtn />
+
+        {/* map comp */}
         <MapView
           style={{
             flex: 1,
           }}
-        />
+          tintColor={"red"}
+          // initialRegion={initialRegion}
+          region={userLocation}
+          showsUserLocation={true}
+        >
+          <Marker
+            coordinate={userLocation}
+            title="my place"
+            description="i am here now"
+          />
+        </MapView>
       </View>
-      <ScrollBottomSheet // If you are using TS, that'll infer the renderItem `item` type
+      <ScrollBottomSheet
         componentType="ScrollView"
-        snapPoints={[100, "50%", windowHeight - 250]}
+        snapPoints={[100, "50%", HEIGHT - 300]}
         innerRef="1"
         initialSnapIndex={2}
         renderHandle={() => {
