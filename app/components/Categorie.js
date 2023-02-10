@@ -2,10 +2,13 @@ import { Image, Pressable, StyleSheet, Text } from "react-native";
 import React from "react";
 import { WIDTH } from "../utils/AppDimension";
 import { AppColor } from "../utils/AppColor";
+import { useNavigation } from "@react-navigation/native";
 
 const Categorie = ({ categorie }) => {
+  const navigation = useNavigation();
   return (
     <Pressable
+      onPress={() => navigation.navigate("GetRide")}
       style={[
         styles.itemStyle,
         categorie.more && {

@@ -3,8 +3,10 @@ import React from "react";
 import { payLogo } from "../utils/fileExport";
 import { AppColor } from "../utils/AppColor";
 import { Ionicons } from "../utils/R_VectorIconExports";
+import { useNavigation } from "@react-navigation/native";
 
 const PaymentPlaceHolderComp = () => {
+  const navigation = useNavigation();
   return (
     <Pressable style={styles.container}>
       <View>

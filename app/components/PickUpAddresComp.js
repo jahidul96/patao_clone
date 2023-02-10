@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { GOOGLE_API_KEY } from "../utils/configData";
+
 import { AppColor } from "../utils/AppColor";
+import { GOOGLE_API_KEY } from "@env";
 
 const PickUpAddresComp = ({ placeholder, onPress }) => {
+  console.log(GOOGLE_API_KEY);
   return (
     <View
       style={{
