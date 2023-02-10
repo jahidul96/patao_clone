@@ -6,7 +6,6 @@ import { AppColor } from "../utils/AppColor";
 import { GOOGLE_API_KEY } from "@env";
 
 const PickUpAddresComp = ({ placeholder, onPress }) => {
-  console.log(GOOGLE_API_KEY);
   return (
     <View
       style={{

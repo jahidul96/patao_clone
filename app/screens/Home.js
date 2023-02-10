@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: AppColor.LightGray,
     marginVertical: 10,
-    elevation: 2,
   },
   addressExtrastyle: {
     marginRight: 15,
