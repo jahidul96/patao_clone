@@ -35,7 +35,7 @@ const CustomeBottomTabBar = () => {
           onPress={() => setSelectedTab(data.id)}
         >
           <Image
-            source={[data.icon]}
+            source={data.icon}
             style={[
               styles.iconStyle,
               data.id == selectedTab && { tintColor: AppColor.RED },
