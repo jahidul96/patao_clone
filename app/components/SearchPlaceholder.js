@@ -3,9 +3,9 @@ import React from "react";
 import { AppColor } from "../utils/AppColor";
 import { Fontisto } from "../utils/R_VectorIconExports";
 
-const SearchPlaceholder = () => {
+const SearchPlaceholder = ({ onPress }) => {
   return (
-    <Pressable style={styles.container}>
+    <Pressable style={styles.container} onPress={onPress}>
       <Fontisto name="map-marker-alt" size={16} color={AppColor.RED} />
       <Text style={styles.text}>Search Destination</Text>
     </Pressable>

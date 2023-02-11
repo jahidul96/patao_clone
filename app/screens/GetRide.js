@@ -1,5 +1,14 @@
-import React, { useContext, useRef } from "react";
-import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import {
+  Alert,
+  Animated,
+  Dimensions,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import ScrollBottomSheet from "react-native-scroll-bottom-sheet";
 
 import MapView, { Marker } from "react-native-maps";
@@ -13,109 +22,100 @@ import SearchPlaceholder from "../components/SearchPlaceholder";
 import AddAddres from "../components/AddAddres";
 import { MyLocationContext } from "../context/LocationContext";
 import { PositionBackBtn } from "../components/reuseable/Reuseable";
-import { HEIGHT } from "../utils/AppDimension";
+import { HEIGHT, WIDTH } from "../utils/AppDimension";
+import ButtonComp from "../components/ButtonComp";
+import GetDesinationModel from "../components/GetDesinationModel";
 
 const GetRide = () => {
   const { userLocation } = useContext(MyLocationContext);
+  const [search, setSearch] = useState(false);
+  const [destination, setDestination] = useState(false);
+
+  const toggleDestination = () => {
+    setSearch(!search);
+  };
+
+  // console.log(points);
 
   return (
     <View style={styles.container}>
-      <View
+      {/* back comp */}
+      <PositionBackBtn />
+
+      {/* map comp */}
+      <MapView
         style={{
           flex: 1,
-          backgroundColor: "red",
+        }}
+        tintColor={"red"}
+        region={userLocation}
+        showsUserLocation={true}
+      >
+        <Marker
+          coordinate={userLocation}
+          title="my place"
+          description="i am here now"
+        />
+      </MapView>
+
+      {/* bottom content */}
+      <View style={styles.bottomContainer}>
+        {destination ? (
+          <View>
+            <SearchPlaceholder onPress={toggleDestination} />
+            <View style={{ marginVertical: 7 }} />
+            <ButtonComp text={"Confirm"} />
+          </View>
+        ) : (
+          <>
+            {/* initial content */}
+            <View style={styles.destinationWrapper}>
+              {/* placeholder comp */}
+              <SearchPlaceholder onPress={toggleDestination} />
+            </View>
+
+            {/* set initial addres */}
+            <View>
+              <AddAddres
+                icon={
+                  <MaterialCommunityIcons
+                    name="star-circle"
+                    size={20}
+                    color={AppColor.Black}
+                  />
+                }
+                text="Home"
+                extraStyle={styles.addressExtrastyle}
+              />
+              <View style={styles.separetorView} />
+              <AddAddres
+                icon={
+                  <MaterialIcons name="work" size={20} color={AppColor.Black} />
+                }
+                text="Work"
+              />
+            </View>
+          </>
+        )}
+      </View>
+
+      {/* modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={search}
+        onRequestClose={() => {
+          setSearch(!search);
+        }}
+        style={{
+          flex: 1,
         }}
       >
-        {/* back comp */}
-        <PositionBackBtn />
-
-        {/* map comp */}
-        <MapView
-          style={{
-            flex: 1,
-          }}
-          tintColor={"red"}
-          // initialRegion={initialRegion}
-          region={userLocation}
-          showsUserLocation={true}
-        >
-          <Marker
-            coordinate={userLocation}
-            title="my place"
-            description="i am here now"
-          />
-        </MapView>
-      </View>
-      <ScrollBottomSheet
-        componentType="ScrollView"
-        snapPoints={[100, "50%", HEIGHT - 300]}
-        innerRef="1"
-        initialSnapIndex={2}
-        renderHandle={() => {
-          return (
-            <View style={styles.contentWrapper}>
-              {/* search destination comp */}
-              <View style={styles.destinationWrapper}>
-                {/* placeholder comp */}
-                <View style={styles.searchPlaceholderWrapper}>
-                  <SearchPlaceholder />
-                </View>
-                {/* add btn */}
-                <AddBtn />
-              </View>
-
-              {/* set initial addres */}
-              <View>
-                <AddAddres
-                  icon={
-                    <MaterialCommunityIcons
-                      name="star-circle"
-                      size={20}
-                      color={AppColor.Black}
-                    />
-                  }
-                  text="Home"
-                  extraStyle={styles.addressExtrastyle}
-                />
-                <View style={styles.separetorView} />
-                <AddAddres
-                  icon={
-                    <MaterialIcons
-                      name="work"
-                      size={20}
-                      color={AppColor.Black}
-                    />
-                  }
-                  text="Work"
-                />
-              </View>
-            </View>
-          );
-        }}
-        data={[]}
-        keyExtractor={(i) => i}
-        renderItem={({ item }) => {}}
-        contentContainerStyle={styles.contentContainerStyle}
-      />
+        <GetDesinationModel setSearch={setSearch} />
+      </Modal>
     </View>
   );
 };
-
-const AddBtn = () => (
-  <Pressable
-    style={{
-      width: "15%",
-      height: 45,
-      justifyContent: "center",
-      alignItems: "center",
-      borderWidth: 1,
-      borderColor: AppColor.GRAY,
-      borderRadius: 10,
-    }}
-  >
-    <Fontisto name="plus-a" size={18} color={AppColor.RED} />
-  </Pressable>
-);
 
 export default GetRide;
 
@@ -123,28 +123,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  contentContainerStyle: {
-    padding: 16,
-    backgroundColor: AppColor.WHITE,
-    flex: 1,
-  },
-  contentWrapper: {
-    backgroundColor: AppColor.WHITE,
-    minHeight: 300,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    paddingTop: 30,
-    paddingHorizontal: 20,
-  },
-  destinationWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  searchPlaceholderWrapper: {
-    width: "80%",
-  },
 
+  // bottom content style
+  bottomContainer: {
+    width: WIDTH,
+    height: HEIGHT / 3.2,
+    backgroundColor: AppColor.WHITE,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    position: "absolute",
+    bottom: 0,
+    justifyContent: "center",
+    paddingHorizontal: 10,
+  },
   addressExtrastyle: {
     width: "100%",
     marginTop: 20,
