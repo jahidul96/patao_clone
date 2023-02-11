@@ -9,13 +9,13 @@ import {
 import PickUpAddresComp from "./PickUpAddresComp";
 import AddAddres from "./AddAddres";
 
-const GetDesinationModel = ({ setSearch }) => {
+const GetDesinationModel = ({ setSearch, onPress }) => {
   return (
     <View style={styles.container}>
       <Pressable onPress={() => setSearch(false)}>
         <Ionicons name="arrow-back" size={26} style={{ marginBottom: 10 }} />
       </Pressable>
-      <PickUpAddresComp placeholder="Destination" />
+      <PickUpAddresComp placeholder="Destination" onPress={onPress} />
 
       {/* set initial addres */}
       <View>

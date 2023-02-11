@@ -3,11 +3,11 @@ import React from "react";
 import { AppColor } from "../utils/AppColor";
 import { Fontisto } from "../utils/R_VectorIconExports";
 
-const SearchPlaceholder = ({ onPress }) => {
+const SearchPlaceholder = ({ onPress, text }) => {
   return (
     <Pressable style={styles.container} onPress={onPress}>
       <Fontisto name="map-marker-alt" size={16} color={AppColor.RED} />
-      <Text style={styles.text}>Search Destination</Text>
+      <Text style={styles.text}>{text ? text : "Search Destination"} </Text>
     </Pressable>
   );
 };

@@ -22,7 +22,7 @@ const PickUpAddresComp = ({ placeholder, onPress }) => {
       )}
       enablePoweredByContainer={false}
       placeholder={placeholder}
-      onPress={(data, details = null) => onPress(details)}
+      onPress={(data, details = null) => onPress(data, details)}
       styles={{
         container: styles.container,
         listView: {},

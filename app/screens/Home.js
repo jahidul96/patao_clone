@@ -18,7 +18,6 @@ import * as Location from "expo-location";
 import { MyLocationContext } from "../context/LocationContext";
 
 const Home = () => {
-  const [myLocation, setMyLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const { userLocation, setUserLocation } = useContext(MyLocationContext);
 
@@ -33,12 +32,6 @@ const Home = () => {
 
       let location = await Location.getCurrentPositionAsync({});
       setUserLocation({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.4235,
-      });
-      setMyLocation({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
         latitudeDelta: 0.0922,

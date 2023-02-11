@@ -30,12 +30,26 @@ const GetRide = () => {
   const { userLocation } = useContext(MyLocationContext);
   const [search, setSearch] = useState(false);
   const [destination, setDestination] = useState(false);
+  const [destinationName, setDestinationName] = useState("");
 
   const toggleDestination = () => {
     setSearch(!search);
   };
 
   // console.log(points);
+
+  const getDestinationData = (data, details) => {
+    // console.log(details);
+    console.log(data.description);
+    console.log(details.geometry.location);
+    setDestinationName(data.description);
+    setDestination({
+      latitude: details.geometry.location.lat,
+      longitude: details.geometry.location.lng,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.4235,
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -62,7 +76,10 @@ const GetRide = () => {
       <View style={styles.bottomContainer}>
         {destination ? (
           <View>
-            <SearchPlaceholder onPress={toggleDestination} />
+            <SearchPlaceholder
+              onPress={toggleDestination}
+              text={destinationName}
+            />
             <View style={{ marginVertical: 7 }} />
             <ButtonComp text={"Confirm"} />
           </View>
@@ -111,7 +128,10 @@ const GetRide = () => {
           flex: 1,
         }}
       >
-        <GetDesinationModel setSearch={setSearch} />
+        <GetDesinationModel
+          setSearch={setSearch}
+          onPress={getDestinationData}
+        />
       </Modal>
     </View>
   );
