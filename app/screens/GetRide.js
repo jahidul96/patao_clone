@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import ScrollBottomSheet from "react-native-scroll-bottom-sheet";
 
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, AnimatedRegion } from "react-native-maps";
 import { AppColor } from "../utils/AppColor";
 import {
   Fontisto,
@@ -39,6 +39,8 @@ const GetRide = () => {
   const [travelTime, setTravelTime] = useState(0);
   const mapRef = useRef(null);
 
+  console.log(userLocation);
+
   const toggleDestination = () => {
     setSearch(!search);
   };
@@ -58,27 +60,26 @@ const GetRide = () => {
   const convertMinsToHrsMins = (mins) => {
     let h = Math.floor(mins / 60);
     let m = mins % 60;
-    h = h < 10 ? "0" + h : h; // (or alternatively) h = String(h).padStart(2, '0')
-    m = m < 10 ? "0" + m : m; // (or alternatively) m = String(m).padStart(2, '0')
+    h = h < 10 ? "0" + h : h;
+    m = m < 10 ? "0" + m : m;
     return `${h}H : ${m}M`;
   };
 
-  // for screen fit map direction
-  // useEffect(() => {
-  //   mapRef.current?.fitToSuppliedMarkers(
-  //     ["origin", "destination"],
-  //     {
-  //       animated: true,
-  //       edgePadding: {
-  //         top: 10,
-  //         left: 100,
-  //         right: 100,
-  //         bottom: 100,
-  //       },
-  //     },
-  //     500
-  //   );
-  // }, [destination, userLocation]);
+  useEffect(() => {}, []);
+  const zoomToLocation = () => {
+    let region = {
+      latitude: userLocation?.latitude,
+      longitude: userLocation?.longitude,
+      latitudeDelta: 5,
+      longitudeDelta: 5,
+    };
+
+    let initialRegion = Object.assign({}, region);
+    initialRegion["latitudeDelta"] = 0.005;
+    initialRegion["longitudeDelta"] = 0.005;
+
+    mapRef?.animateToRegion(initialRegion, 2000);
+  };
 
   return (
     <View style={styles.container}>
@@ -88,6 +89,7 @@ const GetRide = () => {
       {/* map comp */}
       <MapView
         zoomEnabled={true}
+        followsUserLocation={true}
         ref={mapRef}
         style={{
           flex: 1,
@@ -95,6 +97,7 @@ const GetRide = () => {
         tintColor={"red"}
         region={userLocation}
         showsUserLocation={true}
+        // onMapReady={zoomToLocation}
       >
         {userLocation && (
           <Marker
@@ -121,11 +124,8 @@ const GetRide = () => {
             strokeWidth={3}
             strokeColor="black"
             onReady={(result) => {
-              // console.log(`Distance: ${result.distance} km`);
-              // console.log(`Duration: ${result.duration} min.`);
               setTotalDistance(result.distance);
               setTravelTime(result.duration);
-              // convertMinsToHrsMins(result.duration);
 
               // fit to screen
               mapRef?.current?.fitToCoordinates(result.coordinates, {
@@ -164,7 +164,13 @@ const GetRide = () => {
                 text={`${convertMinsToHrsMins(travelTime).slice(0, 8)}M`}
                 extraStyle={styles.extraTextStyle}
               />
-              <Text></Text>
+            </View>
+            <View style={styles.totalDistanceContainer}>
+              <TextComp text="Price : " />
+              <TextComp
+                text={`${Math.trunc(totalDistance * 15)} TK`}
+                extraStyle={styles.extraTextStyle}
+              />
             </View>
             <ButtonComp text={"Confirm"} />
           </View>
@@ -173,7 +179,6 @@ const GetRide = () => {
             {/* initial content */}
             {/* placeholder comp */}
             <SearchPlaceholder onPress={toggleDestination} />
-
             {/* set initial addres */}
             <View>
               <AddAddres
@@ -230,10 +235,8 @@ const styles = StyleSheet.create({
   // bottom content style
   bottomContainer: {
     width: WIDTH,
-    height: HEIGHT / 3.2,
+    height: HEIGHT / 2.7,
     backgroundColor: AppColor.WHITE,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
     justifyContent: "center",
     paddingHorizontal: 10,
   },

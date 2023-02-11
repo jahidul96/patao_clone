@@ -31,6 +31,7 @@ const PickUpAddresComp = ({ placeholder, onPress }) => {
       query={{
         key: GOOGLE_API_KEY,
         language: "en",
+        components: "country:bd",
       }}
     />
   );
