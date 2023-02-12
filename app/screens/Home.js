@@ -31,6 +31,8 @@ const Home = () => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
+      const address = await Location.reverseGeocodeAsync(location.coords);
+      // console.log(address);
       setUserLocation({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,

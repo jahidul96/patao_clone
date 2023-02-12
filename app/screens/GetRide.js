@@ -3,6 +3,7 @@ import {
   Alert,
   Animated,
   Dimensions,
+  Image,
   Modal,
   Pressable,
   StyleSheet,
@@ -15,20 +16,38 @@ import MapView, { Marker, AnimatedRegion } from "react-native-maps";
 import { AppColor } from "../utils/AppColor";
 import {
   Fontisto,
+  Ionicons,
   MaterialCommunityIcons,
   MaterialIcons,
 } from "../utils/R_VectorIconExports";
 import SearchPlaceholder from "../components/SearchPlaceholder";
 import AddAddres from "../components/AddAddres";
 import { MyLocationContext } from "../context/LocationContext";
-import { PositionBackBtn } from "../components/reuseable/Reuseable";
+import {
+  PositionBackBtn,
+  SelectVehical,
+} from "../components/reuseable/Reuseable";
 import { HEIGHT, WIDTH } from "../utils/AppDimension";
 import ButtonComp from "../components/ButtonComp";
 import GetDesinationModel from "../components/GetDesinationModel";
 import MapViewDirections from "react-native-maps-directions";
-
 import { GOOGLE_API_KEY } from "@env";
 import TextComp from "../components/TextComp";
+import DistanceComp from "../components/DistanceComp";
+import { bike, car } from "../utils/fileExport";
+
+const Vehicals = [
+  {
+    id: 1,
+    img: bike,
+    name: "Bike",
+  },
+  {
+    id: 2,
+    img: car,
+    name: "Car",
+  },
+];
 
 const GetRide = () => {
   const { userLocation } = useContext(MyLocationContext);
@@ -37,18 +56,14 @@ const GetRide = () => {
   const [destinationName, setDestinationName] = useState("");
   const [totalDistance, setTotalDistance] = useState(0);
   const [travelTime, setTravelTime] = useState(0);
+  const [selectVehical, setSelectVehical] = useState(1);
   const mapRef = useRef(null);
-
-  console.log(userLocation);
 
   const toggleDestination = () => {
     setSearch(!search);
   };
 
   const getDestinationData = (data, details) => {
-    // console.log(details);
-    // console.log(data.description);
-    // console.log(details.geometry.location);
     setDestinationName(data.description);
     setDestination({
       latitude: details.geometry.location.lat,
@@ -66,6 +81,7 @@ const GetRide = () => {
   };
 
   useEffect(() => {}, []);
+
   const zoomToLocation = () => {
     let region = {
       latitude: userLocation?.latitude,
@@ -85,6 +101,23 @@ const GetRide = () => {
     <View style={styles.container}>
       {/* back comp */}
       <PositionBackBtn />
+      {/* distance show */}
+      {destination && (
+        <DistanceComp
+          text={`${totalDistance} KM`}
+          icon={<MaterialCommunityIcons name="map-marker-distance" size={20} />}
+          extraStyle={{ top: "10%", right: 0 }}
+        />
+      )}
+
+      {/* travel time show */}
+      {destination && (
+        <DistanceComp
+          text={`${convertMinsToHrsMins(travelTime).slice(0, 8)}M`}
+          icon={<Ionicons name="time" size={20} />}
+          extraStyle={{ left: 0 }}
+        />
+      )}
 
       {/* map comp */}
       <MapView
@@ -142,38 +175,40 @@ const GetRide = () => {
       </MapView>
 
       {/* bottom content */}
-      <View style={styles.bottomContainer}>
+      <View
+        style={[
+          styles.bottomContainer,
+          destination && { height: HEIGHT / 3.2 },
+        ]}
+      >
         {destination ? (
-          <View>
+          <>
+            {/* car/bike select */}
+            <View style={styles.vehicalSelectWrapper}>
+              {Vehicals.map((vehical) => (
+                <SelectVehical
+                  img={vehical.img}
+                  id={vehical.id}
+                  name={vehical.name}
+                  selectVehical={selectVehical}
+                  onPress={() => setSelectVehical(vehical.id)}
+                  price={
+                    vehical.name == "Bike"
+                      ? `${Math.trunc(totalDistance * 10)} TK`
+                      : `${Math.trunc(totalDistance * 40)} TK`
+                  }
+                />
+              ))}
+            </View>
+
             <SearchPlaceholder
               onPress={toggleDestination}
               text={destinationName}
             />
             <View style={{ marginVertical: 7 }} />
-            {/* total distance content */}
-            <View style={styles.totalDistanceContainer}>
-              <TextComp text="Total Distance : " />
-              <TextComp
-                text={`${totalDistance} KM`}
-                extraStyle={styles.extraTextStyle}
-              />
-            </View>
-            <View style={styles.totalDistanceContainer}>
-              <TextComp text="Time : " />
-              <TextComp
-                text={`${convertMinsToHrsMins(travelTime).slice(0, 8)}M`}
-                extraStyle={styles.extraTextStyle}
-              />
-            </View>
-            <View style={styles.totalDistanceContainer}>
-              <TextComp text="Price : " />
-              <TextComp
-                text={`${Math.trunc(totalDistance * 15)} TK`}
-                extraStyle={styles.extraTextStyle}
-              />
-            </View>
+
             <ButtonComp text={"Confirm"} />
-          </View>
+          </>
         ) : (
           <>
             {/* initial content */}
@@ -203,7 +238,6 @@ const GetRide = () => {
           </>
         )}
       </View>
-
       {/* modal */}
       <Modal
         animationType="slide"
@@ -235,10 +269,11 @@ const styles = StyleSheet.create({
   // bottom content style
   bottomContainer: {
     width: WIDTH,
-    height: HEIGHT / 2.7,
+    height: HEIGHT / 3.4,
     backgroundColor: AppColor.WHITE,
-    justifyContent: "center",
+    justifyContent: "flex-end",
     paddingHorizontal: 10,
+    paddingBottom: 10,
   },
   addressExtrastyle: {
     width: "100%",
@@ -255,8 +290,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignItems: "center",
   },
-  extraTextStyle: {
-    color: AppColor.RED,
-    marginLeft: 7,
+
+  distanceTextStyle: {
+    fontSize: 13,
+    marginLeft: 5,
+  },
+  vehicalSelectWrapper: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+    marginTop: -10,
   },
 });
