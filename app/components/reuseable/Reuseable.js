@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import { Image, Pressable, StyleSheet, Text } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { AppColor } from "../../utils/AppColor";
-import { menu } from "../../utils/fileExport";
+import { menu, takaIcon } from "../../utils/fileExport";
 import TextComp from "../TextComp";
 
 export const PositionBackBtn = () => {
@@ -53,7 +53,10 @@ export const SelectVehical = ({
   >
     <Image source={img} style={styles.vehicalImgStyle} />
     <Text>{name}</Text>
-    <TextComp text={price} extraStyle={styles.extraTextStyle} />
+    <View style={styles.priceWrapper}>
+      <Image source={takaIcon} style={styles.takaIconStyle} />
+      <TextComp text={price} extraStyle={styles.extraTextStyle} />
+    </View>
   </Pressable>
 );
 
@@ -73,5 +76,12 @@ const styles = StyleSheet.create({
     color: AppColor.RED,
     marginTop: 2,
     fontSize: 14,
+  },
+  priceWrapper: { flexDirection: "row", alignItems: "center" },
+  takaIconStyle: {
+    width: 13,
+    height: 13,
+    tintColor: AppColor.Black,
+    marginRight: 3,
   },
 });
