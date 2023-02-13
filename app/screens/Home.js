@@ -36,8 +36,8 @@ const Home = () => {
       setUserLocation({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.4235,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
       });
     })();
   }, []);

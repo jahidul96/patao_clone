@@ -80,27 +80,27 @@ const GetRide = () => {
     return `${h}H : ${m}M`;
   };
 
-  useEffect(() => {}, []);
-
+  // zoom user current location the location
   const zoomToLocation = () => {
     let region = {
       latitude: userLocation?.latitude,
       longitude: userLocation?.longitude,
-      latitudeDelta: 5,
-      longitudeDelta: 5,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
     };
 
-    let initialRegion = Object.assign({}, region);
-    initialRegion["latitudeDelta"] = 0.005;
-    initialRegion["longitudeDelta"] = 0.005;
-
-    mapRef?.animateToRegion(initialRegion, 2000);
+    mapRef?.current?.animateToRegion(region, 5000);
   };
+
+  useEffect(() => {
+    zoomToLocation();
+  }, []);
 
   return (
     <View style={styles.container}>
       {/* back comp */}
       <PositionBackBtn />
+
       {/* distance show */}
       {destination && (
         <DistanceComp
@@ -123,17 +123,18 @@ const GetRide = () => {
       <MapView
         zoomEnabled={true}
         followsUserLocation={true}
+        // minZoomLevel={10}
         ref={mapRef}
         style={{
           flex: 1,
         }}
-        tintColor={"red"}
-        region={userLocation}
+        tintColor={"black"}
+        initialRegion={userLocation}
+        // region={userLocation}
         showsUserLocation={true}
-        // onMapReady={zoomToLocation}
       >
         {userLocation && (
-          <Marker
+          <Marker.Animated
             coordinate={userLocation}
             title="my place"
             description="i am here now"
@@ -141,10 +142,10 @@ const GetRide = () => {
           />
         )}
         {destination && (
-          <Marker
+          <Marker.Animated
             coordinate={destination}
-            title="my place"
-            description="i am here now"
+            title="my destination"
+            description="destination"
             identifier="destination"
           />
         )}
@@ -189,6 +190,7 @@ const GetRide = () => {
                 <SelectVehical
                   img={vehical.img}
                   id={vehical.id}
+                  key={vehical.id}
                   name={vehical.name}
                   selectVehical={selectVehical}
                   onPress={() => setSelectVehical(vehical.id)}
