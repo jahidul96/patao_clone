@@ -20,6 +20,7 @@ export const PositionBackBtn = () => {
         zIndex: 999,
         justifyContent: "center",
         alignItems: "center",
+        elevation: 5,
       }}
       onPress={() => navigation.goBack()}
     >

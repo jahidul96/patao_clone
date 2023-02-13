@@ -32,9 +32,8 @@ import ButtonComp from "../components/ButtonComp";
 import GetDesinationModel from "../components/GetDesinationModel";
 import MapViewDirections from "react-native-maps-directions";
 import { GOOGLE_API_KEY } from "@env";
-import TextComp from "../components/TextComp";
 import DistanceComp from "../components/DistanceComp";
-import { bike, car } from "../utils/fileExport";
+import { bike, car, position } from "../utils/fileExport";
 
 const Vehicals = [
   {
@@ -135,11 +134,18 @@ const GetRide = () => {
       >
         {userLocation && (
           <Marker.Animated
+            pinColor={"red"}
             coordinate={userLocation}
             title="my place"
             description="i am here now"
             identifier="origin"
-          />
+            // image={position}
+          >
+            {/* <Image
+              source={position}
+              style={{ width: 15, height: 15,  }}
+            /> */}
+          </Marker.Animated>
         )}
         {destination && (
           <Marker.Animated
@@ -196,8 +202,12 @@ const GetRide = () => {
                   onPress={() => setSelectVehical(vehical.id)}
                   price={
                     vehical.name == "Bike"
-                      ? `${Math.trunc(totalDistance * 10)} TK`
-                      : `${Math.trunc(totalDistance * 40)} TK`
+                      ? totalDistance > 100
+                        ? `${Math.trunc(totalDistance * 8)} TK`
+                        : `${Math.trunc(totalDistance * 15)} TK`
+                      : totalDistance > 50
+                      ? `${Math.trunc(totalDistance * 20)} TK`
+                      : `${Math.trunc(totalDistance * 30)} TK`
                   }
                 />
               ))}
@@ -214,6 +224,7 @@ const GetRide = () => {
         ) : (
           <>
             {/* initial content */}
+
             {/* placeholder comp */}
             <SearchPlaceholder onPress={toggleDestination} />
             {/* set initial addres */}

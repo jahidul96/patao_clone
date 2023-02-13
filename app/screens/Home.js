@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, StatusBar, ScrollView } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import { AppColor } from "../utils/AppColor";
 import ProfileHeader from "../components/ProfileHeader";
 import Categorie from "../components/Categorie";
@@ -14,36 +14,8 @@ import {
   MaterialIcons,
 } from "../utils/R_VectorIconExports";
 import CustomeBottomTabBar from "../components/CustomeBottomTabBar";
-import * as Location from "expo-location";
-import { MyLocationContext } from "../context/LocationContext";
 
 const Home = () => {
-  const [errorMsg, setErrorMsg] = useState(null);
-  const { userLocation, setUserLocation } = useContext(MyLocationContext);
-
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        console.log("not granted permision");
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      const address = await Location.reverseGeocodeAsync(location.coords);
-      // console.log(address);
-      setUserLocation({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      });
-    })();
-  }, []);
-
-  // console.log(myLocation);
-
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={AppColor.LightGray} barStyle="dark-content" />
