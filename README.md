@@ -14,7 +14,7 @@
 
 # app details
 
-1. user current permision
+1. user current location
 2. user current position showing in map
 3. destionation point pick,
 4. price/distance/travel time show.
