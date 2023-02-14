@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 
 const ProfileHeader = () => {
   const myAdderss = useSelector((state) => state.myLocation.myAdderss);
+  // console.log(myAdderss);
 
   return (
     <View style={styles.profileContainer}>
@@ -27,10 +28,10 @@ const ProfileHeader = () => {
           <Fontisto name="map-marker-alt" size={16} />
           <Text style={styles.addresTextStyle}>
             {myAdderss == null
-              ? "your adders1"
-              : myAdderss.length > 15
-              ? myAdderss.slice(0, 15) + "..."
-              : myAdderss}
+              ? "your adders"
+              : myAdderss?.street.length > 15
+              ? myAdderss?.street.slice(0, 15) + "..."
+              : myAdderss?.street}
           </Text>
         </View>
         <Ionicons name="chevron-forward" size={16} />

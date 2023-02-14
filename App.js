@@ -35,7 +35,7 @@ const AppWrapper = () => {
 
       // console.log(address[0].district);
 
-      dispatch(addAddress(address[0].district));
+      dispatch(addAddress(address[0]));
       dispatch(
         addUserLocation({
           latitude: location.coords.latitude,
