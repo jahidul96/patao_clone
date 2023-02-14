@@ -34,6 +34,7 @@ import MapViewDirections from "react-native-maps-directions";
 import { GOOGLE_API_KEY } from "@env";
 import DistanceComp from "../components/DistanceComp";
 import { bike, car, position } from "../utils/fileExport";
+import { useSelector } from "react-redux";
 
 const Vehicals = [
   {
@@ -49,7 +50,7 @@ const Vehicals = [
 ];
 
 const GetRide = () => {
-  const { userLocation } = useContext(MyLocationContext);
+  const userLocation = useSelector((state) => state.myLocation.userLocation);
   const [search, setSearch] = useState(false);
   const [destination, setDestination] = useState(null);
   const [destinationName, setDestinationName] = useState("");

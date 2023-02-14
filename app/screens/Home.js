@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, StatusBar, ScrollView } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { AppColor } from "../utils/AppColor";
 import ProfileHeader from "../components/ProfileHeader";
 import Categorie from "../components/Categorie";
@@ -9,6 +9,7 @@ import { storyData } from "../data/stroyData";
 import StoryComp from "../components/StoryComp";
 import TextComp from "../components/TextComp";
 import AddAddres from "../components/AddAddres";
+import { MyLocationContext } from "../context/LocationContext";
 import {
   MaterialCommunityIcons,
   MaterialIcons,

@@ -6,9 +6,16 @@ import { useNavigation } from "@react-navigation/native";
 
 const Categorie = ({ categorie }) => {
   const navigation = useNavigation();
+  const gotoPage = (name) => {
+    if (name == "Bike" || name == "Car") {
+      navigation.navigate("GetRide");
+    } else {
+      navigation.navigate("Info");
+    }
+  };
   return (
     <Pressable
-      onPress={() => navigation.navigate("GetRide")}
+      onPress={() => gotoPage(categorie.name)}
       style={[
         styles.itemStyle,
         categorie.more && {

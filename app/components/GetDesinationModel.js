@@ -13,7 +13,7 @@ const GetDesinationModel = ({ setSearch, onPress }) => {
   return (
     <View style={styles.container}>
       <Pressable onPress={() => setSearch(false)}>
-        <Ionicons name="arrow-back" size={26} style={{ marginBottom: 10 }} />
+        <Ionicons name="arrow-back" size={26} style={{ marginBottom: 20 }} />
       </Pressable>
       <PickUpAddresComp placeholder="Destination" onPress={onPress} />
 
