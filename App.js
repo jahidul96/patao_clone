@@ -19,7 +19,6 @@ const AppWrapper = () => {
   const dispatch = useDispatch();
 
   // getting user location
-
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();

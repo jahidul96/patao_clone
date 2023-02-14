@@ -34,7 +34,9 @@ import MapViewDirections from "react-native-maps-directions";
 import { GOOGLE_API_KEY } from "@env";
 import DistanceComp from "../components/DistanceComp";
 import { bike, car, position } from "../utils/fileExport";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addDestination } from "../feature/locationSlice";
+import { useNavigation } from "@react-navigation/native";
 
 const Vehicals = [
   {
@@ -58,9 +60,19 @@ const GetRide = () => {
   const [travelTime, setTravelTime] = useState(0);
   const [selectVehical, setSelectVehical] = useState(1);
   const mapRef = useRef(null);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const toggleDestination = () => {
     setSearch(!search);
+  };
+
+  // confirm ride
+
+  const confirmRide = () => {
+    console.log("press");
+    if (!userLocation || !destination) return;
+    navigation.navigate("Confirm");
   };
 
   const getDestinationData = (data, details) => {
@@ -68,7 +80,17 @@ const GetRide = () => {
     setDestination({
       latitude: details.geometry.location.lat,
       longitude: details.geometry.location.lng,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
     });
+    dispatch(
+      addDestination({
+        latitude: details.geometry.location.lat,
+        longitude: details.geometry.location.lng,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
+      })
+    );
     setSearch(!search);
   };
 
@@ -195,10 +217,8 @@ const GetRide = () => {
             <View style={styles.vehicalSelectWrapper}>
               {Vehicals.map((vehical) => (
                 <SelectVehical
-                  img={vehical.img}
-                  id={vehical.id}
                   key={vehical.id}
-                  name={vehical.name}
+                  vehicalDetails={vehical}
                   selectVehical={selectVehical}
                   onPress={() => setSelectVehical(vehical.id)}
                   price={
@@ -220,7 +240,7 @@ const GetRide = () => {
             />
             <View style={{ marginVertical: 7 }} />
 
-            <ButtonComp text={"Confirm"} />
+            <ButtonComp text={"Confirm"} onPress={confirmRide} />
           </>
         ) : (
           <>

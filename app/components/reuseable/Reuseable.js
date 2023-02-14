@@ -9,19 +9,7 @@ export const PositionBackBtn = () => {
 
   return (
     <Pressable
-      style={{
-        position: "absolute",
-        width: 45,
-        height: 45,
-        backgroundColor: AppColor.WHITE,
-        borderRadius: 100,
-        top: 10,
-        left: 20,
-        zIndex: 999,
-        justifyContent: "center",
-        alignItems: "center",
-        elevation: 5,
-      }}
+      style={styles.positionBackBtnStyle}
       onPress={() => navigation.goBack()}
     >
       <Image
@@ -36,24 +24,22 @@ export const PositionBackBtn = () => {
   );
 };
 export const SelectVehical = ({
-  img,
-  name,
-  price,
+  vehicalDetails,
   onPress,
   selectVehical,
-  id,
+  price,
 }) => (
   <Pressable
     style={[
       styles.vehicalStyle,
-      selectVehical == id && {
+      selectVehical == vehicalDetails.id && {
         backgroundColor: "#ddd",
       },
     ]}
     onPress={onPress}
   >
-    <Image source={img} style={styles.vehicalImgStyle} />
-    <Text>{name}</Text>
+    <Image source={vehicalDetails.img} style={styles.vehicalImgStyle} />
+    <Text>{vehicalDetails.name}</Text>
     <View style={styles.priceWrapper}>
       <Image source={takaIcon} style={styles.takaIconStyle} />
       <TextComp text={price} extraStyle={styles.extraTextStyle} />
@@ -62,6 +48,26 @@ export const SelectVehical = ({
 );
 
 const styles = StyleSheet.create({
+  positionBackBtnStyle: {
+    position: "absolute",
+    width: 45,
+    height: 45,
+    backgroundColor: AppColor.WHITE,
+    borderRadius: 100,
+    top: 10,
+    left: 20,
+    zIndex: 999,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 4.59,
+    elevation: 5,
+  },
   vehicalStyle: {
     alignItems: "center",
     justifyContent: "center",

@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   myAdderss: null,
   userLocation: null,
+  destination: null,
 };
 
 export const LocationSlice = createSlice({
@@ -15,9 +16,13 @@ export const LocationSlice = createSlice({
     addUserLocation: (state, action) => {
       state.userLocation = action.payload;
     },
+    addDestination: (state, action) => {
+      state.destination = action.payload;
+    },
   },
 });
 
-export const { addAddress, addUserLocation } = LocationSlice.actions;
+export const { addAddress, addUserLocation, addDestination } =
+  LocationSlice.actions;
 
 export default LocationSlice.reducer;

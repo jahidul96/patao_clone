@@ -2,9 +2,9 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 import React from "react";
 import { AppColor } from "../utils/AppColor";
 
-const ButtonComp = ({ text, extraStyle, extraTextStyle }) => {
+const ButtonComp = ({ text, extraStyle, extraTextStyle, onPress }) => {
   return (
-    <Pressable style={[styles.container, extraStyle]}>
+    <Pressable style={[styles.container, extraStyle]} onPress={onPress}>
       <Text style={[styles.text, extraTextStyle]}>{text}</Text>
     </Pressable>
   );
